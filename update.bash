@@ -5,3 +5,4 @@ git clone https://github.com/JRodez/file-sender-through-wifi-bt.git
 sleep 1
 ls
 cd ./file-sender-through-wifi-bt/
+cd ../file-sender-through-wifi-bt 
