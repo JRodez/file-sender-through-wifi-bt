@@ -1,16 +1,18 @@
 import socket
 import tqdm
 import os
+import sys
 
 SEPARATOR = "<SEPARATOR>"
 BUFFER_SIZE = 4096 # send 4096 bytes each time step
 
 # the ip address or hostname of the server, the receiver
-host = "192.168.1.101"
+host = sys.argv[1] #"192.168.1.101"
 # the port, let's use 5001
-port = 5001
+port = int(sys.argv[2])
+
 # the name of file we want to send, make sure it exists
-filename = "dada.txt"
+filename = sys.argv[3]
 # get the file size
 filesize = os.path.getsize(filename)
 
