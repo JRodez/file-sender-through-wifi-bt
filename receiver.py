@@ -2,27 +2,25 @@ import socket
 import tqdm
 import os
 import sys
-# device's IP address
+
 SERVER_HOST = "0.0.0.0"
 SERVER_PORT = int(sys.argv[1])
-# receive 4096 bytes each time
+
+
 BUFFER_SIZE = 4096
 SEPARATOR = "<SEPARATOR>"
 
-# create the server socket
-# TCP socket
+# socket
 s = socket.socket()
 # bind the socket to our local address
 s.bind((SERVER_HOST, SERVER_PORT))
+s.listen(10)
 
-# enabling our server to accept connections
-# 5 here is the number of unaccepted connections that
-# the system will allow before refusing new connections
-s.listen(5)
-print(f"[*] Listening as {SERVER_HOST}:{SERVER_PORT}")
+print(f"Listening at {SERVER_HOST}:{SERVER_PORT}")
 
 # accept connection if there is any
 client_socket, address = s.accept()
+
 # if below code is executed, that means the sender is connected
 print(f"[+] {address} is connected.")
 
