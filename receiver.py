@@ -1,55 +1,36 @@
+# coding: utf-8
+
 import socket
-import tqdm
-import os
-import sys
+import threading
 
-SERVER_HOST = "0.0.0.0"
-SERVER_PORT = int(sys.argv[1])
+class ClientThread(threading.Thread):
 
+    def __init__(self, ip, port, clientsocket):
 
-BUFFER_SIZE = 4096
-SEPARATOR = "<SEPARATOR>"
+        threading.Thread.__init__(self)
+        self.ip = ip
+        self.port = port
+        self.clientsocket = clientsocket
+        print("[+] Nouveau thread pour %s %s" % (self.ip, self.port, ))
 
-# socket
-s = socket.socket()
-# bind the socket to our local address
-s.bind((SERVER_HOST, SERVER_PORT))
-s.listen(10)
+    def run(self):
 
-print(f"Listening at {SERVER_HOST}:{SERVER_PORT}")
+        print("Connexion de %s %s" % (self.ip, self.port, ))
 
-# accept connection if there is any
-client_socket, address = s.accept()
+        r = self.clientsocket.recv(2048)
+        print("Ouverture du fichier: ", r, "...")
+        fp = open(r, 'rb')
+        self.clientsocket.send(fp.read())
 
-# if below code is executed, that means the sender is connected
-print(f"[+] {address} is connected.")
+        print("Client déconnecté...")
 
-# receive the file infos
-# receive using client socket, not server socket
-received = client_socket.recv(BUFFER_SIZE).decode()
-filename, filesize = received.split(SEPARATOR)
-# remove absolute path if there is
-filename = os.path.basename(filename)
-# convert to integer
-filesize = int(filesize)
+tcpsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+tcpsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+tcpsock.bind(("",1111))
 
-# start receiving the file from the socket
-# and writing to the file stream
-progress = tqdm.tqdm(range(filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-with open(filename, "wb") as f:
-    while True:
-        # read 1024 bytes from the socket (receive)
-        bytes_read = client_socket.recv(BUFFER_SIZE)
-        if not bytes_read:
-            # nothing is received
-            # file transmitting is done
-            break
-        # write to the file the bytes we just received
-        f.write(bytes_read)
-        # update the progress bar
-        progress.update(len(bytes_read))
-
-# close the client socket
-client_socket.close()
-# close the server socket
-s.close()
+while True:
+    tcpsock.listen(10)
+    print( "En écoute...")
+    (clientsocket, (ip, port)) = tcpsock.accept()
+    newthread = ClientThread(ip, port, clientsocket)
+    newthread.start()
