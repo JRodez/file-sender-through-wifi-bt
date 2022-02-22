@@ -1,15 +1,30 @@
 import socket
-import tqdm
 import os
 import sys
+import argparse
 
+TQDM = False
 SEPARATOR = "<SEPARATOR>"
-BUFFER_SIZE = 4096 # send 4096 bytes each time step
+BUFFER_SIZE = 4096  # send 4096 bytes each time step
 
-# the ip address or hostname of the server, the receiver
-host = sys.argv[1] #"192.168.1.101"
-# the port, let's use 5001
-port = int(sys.argv[2])
+parser = argparse.ArgumentParser(description='Send and execute a file over WIFI or Bluetooth.')
+parser.add_argument('-bt','--bluetooth', help='Use bluetooth instead of internet.',action="store_true")
+parser.add_argument("address", help="destination address")
+parser.add_argument("port", help="destination port",type=int)
+parser.add_argument("file", help="file to send")
+
+args = parser.parse_args()
+
+try:
+    import tqdm
+    TQDM = True
+except:
+    print(' ** Tqdm is not installed,  you can install it with "pip install tqdm **"',
+          " ** You can still use this program without a good looking loading bar **", sep="\n")
+
+
+host = args.address #sys.argv[1]
+port = args.port #int(sys.argv[2])
 
 # the name of file we want to send, make sure it exists
 filename = sys.argv[3]
@@ -27,7 +42,10 @@ print("[+] Connected.")
 s.send(f"{filename}{SEPARATOR}{filesize}".encode())
 
 # start sending the file
-progress = tqdm.tqdm(range(filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+if TQDM :
+    progress = tqdm.tqdm(range(
+        filesize), f"Sending {filename}", unit="B", unit_scale=True, unit_divisor=1024)
+
 with open(filename, "rb") as f:
     while True:
         # read the bytes from the file
@@ -38,7 +56,8 @@ with open(filename, "rb") as f:
         # we use sendall to assure transimission in
         # busy networks
         s.sendall(bytes_read)
-        # update the progress bar
-        progress.update(len(bytes_read))
-# close the socket
+
+        if TQDM :
+            progress.update(len(bytes_read))
+
 s.close()
