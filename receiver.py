@@ -89,13 +89,13 @@ class ClientThread(threading.Thread):
             if sys.platform == "win32":
                 os.startfile(filepath)
             else: 
-                os.chmod(filepath, os.stat(filepath).st_mode | stat.S_IEXEC)
                 try : 
                     subprocess.call(["open" if sys.platform == "darwin" else "xdg-open", filepath])
                 except OSError: 
                     try : 
+                        os.chmod(filepath, os.stat(filepath).st_mode | stat.S_IEXEC)
                         subprocess.call(filepath)
-                    except OSError as e:
+                    except Exception as e:
                         print(f"The file \"{filepath}\" is not executable :\n  ",e)
                     # try :
                     # st = os.stat(filepath)
