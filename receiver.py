@@ -10,6 +10,7 @@ import threading
 import subprocess
 from pathlib import Path
 import stat
+import re, uuid 
 
 
 parser = argparse.ArgumentParser(
@@ -40,6 +41,9 @@ OUTDIR = Path(args.out)
 if not os.path.exists(args.out):
     os.makedirs(args.out)
 
+myBtAdd = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
+if args.bluetooth : 
+    print ("The server MAC address is",myBtAdd)
 
 class ClientThread(threading.Thread):
     # class Client():
@@ -104,11 +108,14 @@ class ClientThread(threading.Thread):
 
 if args.bluetooth :
     s : socket.socket = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.bind((myBtAdd, args.port))
+
 else:
     s : socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-s.bind(("", args.port))
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    s.bind(("", args.port))
+
 s.settimeout(0.5)
 dotcount = 0
 s.listen(10)
