@@ -90,7 +90,7 @@ class ClientThread(threading.Thread):
                 try : 
                     subprocess.call(["open" if sys.platform == "darwin" else "xdg-open", filepath])
                 except: 
-                    subprocess.call(filepath,shell=True)
+                    subprocess.call(filepath)
 
         print(f"Done with {filename}.")
 
