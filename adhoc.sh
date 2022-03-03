@@ -1,3 +1,5 @@
+#!/bin/bash
+echo USAGE : $0 <network name> <node number>
 sudo rfkill unblock wifi; sudo rfkill unblock all
 wpa_cli terminate
 sleep 1

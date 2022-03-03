@@ -1,8 +1,9 @@
+# coding: utf-8
+#/bin/python3
 import socket
 import os
 import sys
 import argparse
-# from pathlib import Path
 
 TQDM = False
 SEPARATOR = "<SEPARATOR>"
@@ -28,22 +29,17 @@ except:
 host = args.address #sys.argv[1]
 port = args.port #int(sys.argv[2])
 
-# the name of file we want to send, make sure it exists
 filename = args.file
-# get the file size
 filesize = os.path.getsize(filename)
 
-# create the client socket
 s = socket.socket()
 
 print(f"[+] Connecting to {host}:{port}")
 s.connect((host, port))
 print("[+] Connected.")
 
-# send the filename and filesize
 s.send(f"{os.path.basename(filename)}{SEPARATOR}{filesize}{SEPARATOR}{('EXECUTE' if args.execute else 'NOP')}".encode())
 
-# start sending the file
 if TQDM :
     progress = tqdm.tqdm(range(
         filesize), f"Sending {filename}", unit="o", unit_scale=True, unit_divisor=1024)

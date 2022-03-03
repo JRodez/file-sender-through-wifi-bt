@@ -1,4 +1,5 @@
 # coding: utf-8
+#/bin/python3
 
 import socket
 import os
@@ -17,7 +18,7 @@ parser.add_argument("port", help="destination port", type=int)
 parser.add_argument(
     "-o", "--out", help='destination folder of the file, default = "./out/"', default="./out/")
 parser.add_argument(
-    "-l","--loop", help="relisten when a download is finished.", action="store_true")
+    "-l", "--loop", help="relisten when a download is finished.", action="store_true")
 
 args = parser.parse_args()
 
@@ -26,7 +27,7 @@ try:
     TQDM = True
 except:
     print(' ** Tqdm is not installed,  you can install it with "pip install tqdm **"',
-          " ** You can still use this program without a good looking loading bar **", sep="\n")
+          " ** You can still use this program without a good looking loading bar and incompleted download catching **", sep="\n")
 
 
 SERVER_HOST = "0.0.0.0"
@@ -38,11 +39,11 @@ if not os.path.exists(args.out):
     os.makedirs(args.out)
 
 
-# class ClientThread(threading.Thread):
-class Client():
+class ClientThread(threading.Thread):
+    # class Client():
     def __init__(self, ip, port, clientsocket):
 
-        # threading.Thread.__init__(self)
+        threading.Thread.__init__(self)
         self.ip = ip
         self.port = port
         self.clientsocket: socket.socket = clientsocket
@@ -92,16 +93,23 @@ tcpsock.settimeout(0.5)
 dotcount = 0
 tcpsock.listen(10)
 
+# print(f"Listening on {args.port} ." + "." *
+#         dotcount + " "*(5-dotcount), end="", flush=True)
+if args.loop : print(f"Listening on {args.port} ...",end="", flush=True)
+
 while True:
-    print(f"\rListening on {args.port} ." + "." *
-          dotcount + " "*(5-dotcount), end="", flush=True)
-    dotcount = (dotcount + 1) % 6
+    if not args.loop:
+        print(f"\rListening on {args.port} ." + "." *
+              dotcount + " "*(5-dotcount), end="", flush=True)
+        dotcount = (dotcount + 1) % 6
+
     try:
         (clientsocket, (ip, port)) = tcpsock.accept()
         print()
-        client = Client(ip, port, clientsocket)
-        client.run()
-        if not args.loop : 
+        client = ClientThread(ip, port, clientsocket)
+        client.start()
+
+        if not args.loop:
             exit()
     except socket.timeout:
         continue
