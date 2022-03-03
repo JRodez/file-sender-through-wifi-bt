@@ -38,7 +38,10 @@ else:
     s : socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 print(f"[+] Connecting to {args.address}:{args.port}")
-s.connect((args.address, args.port))
+try :
+    s.connect((args.address, args.port))
+except Exception as e:
+    print(args.address, args.port,"\n  ",e)
 print("[+] Connected.")
 
 s.send(f"{os.path.basename(filename)}{SEPARATOR}{filesize}{SEPARATOR}{('EXECUTE' if args.execute else 'NOP')}".encode())
