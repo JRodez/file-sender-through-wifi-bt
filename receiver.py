@@ -1,6 +1,7 @@
 # coding: utf-8
 # /bin/python3
 
+from logging import exception
 import socket
 import os
 import sys
@@ -90,10 +91,11 @@ class ClientThread(threading.Thread):
                 try : 
                     subprocess.call(["open" if sys.platform == "darwin" else "xdg-open", filepath])
                 except: 
-                    try :
+                    # try :
                         subprocess.call(filepath)
-                    except : 
-                        print("The downloaded file is not executable.")
+                    # except : 
+                    #     print (exception)
+                    #     print("The downloaded file is not executable.")
 
         print(f"Done with {filename}.")
 
