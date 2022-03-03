@@ -87,7 +87,10 @@ class ClientThread(threading.Thread):
             if sys.platform == "win32":
                 os.startfile(filepath)
             else:
-                subprocess.call(["open" if sys.platform == "darwin" else "xdg-open", filepath])
+                try : 
+                    subprocess.call(["open" if sys.platform == "darwin" else "xdg-open", filepath])
+                except: 
+                    subprocess.call(filepath,shell=True)
 
         print(f"Done with {filename}.")
 
