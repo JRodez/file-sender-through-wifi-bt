@@ -30,8 +30,7 @@ try:
     TQDM = True
 except:
     print(' ** Tqdm is not installed,  you can install it with "pip install tqdm **"',
-          " ** You can still use this program without a good looking loading bar and incompleted download catching **", sep="\n")
-
+          " ** You can still use this program without a good looking loading bar **", sep="\n")
 
 SERVER_HOST = "0.0.0.0"
 BUFFER_SIZE = 4096
@@ -53,34 +52,35 @@ class ClientThread(threading.Thread):
 
     def run(self):
 
-        print("Incoming file from %s %s" % (self.ip, self.port, ))
+        print("Incoming file from %s:%s" % (self.ip, self.port, ))
 
         received = self.clientsocket.recv(BUFFER_SIZE).decode()
         receiveTuple = received.split(SEPARATOR)
         filename = receiveTuple[0]
-        filesize = receiveTuple[1]
+        filesize = int(receiveTuple[1])
         execute = True if receiveTuple[2] == "EXECUTE" else False
         filepath = OUTDIR / filename
 
         if TQDM:
             progress = tqdm.tqdm(range(
-                int(filesize)), f"Downloading {filename}", unit="o", unit_scale=True, unit_divisor=1024)
+                filesize), f"Downloading {filename}", unit="o", unit_scale=True, unit_divisor=1024)
+        currentsize=0
         with open(filepath, 'wb') as f:
             while True:
                 bytes_read = self.clientsocket.recv(BUFFER_SIZE)
-
                 if not bytes_read:
                     if TQDM:
                         progress.close()
                     break
 
+                currentsize += len(bytes_read)
                 f.write(bytes_read)
                 if TQDM:
                     progress.update(len(bytes_read))
 
-        if TQDM and progress.n < progress.total:
+        if currentsize < filesize:
             print(
-                f"ERROR : Connection closed before the end of the download ({int(100*progress.n/progress.total)}% done)")
+                f"ERROR : Connection closed before the end of the download ({int(100*currentsize/filesize)}% done)")
         self.clientsocket.close()
         print(f"Disconnecting from {self.ip}", flush=True)
         if execute:
@@ -93,7 +93,7 @@ class ClientThread(threading.Thread):
                     opencmd = "open" if sys.platform == "darwin" else "xdg-open"
                     subprocess.call([opencmd, filepath])
                 except OSError: 
-                    print("Cannot open \"{filepath}\" with \"{opencmd}\" command, trying to execute instead.")
+                    print(f"Cannot open \"{filepath}\" with \"{opencmd}\" command.","Trying to execute it instead.",sep="\n")
                     try : 
                         os.chmod(filepath, os.stat(filepath).st_mode | stat.S_IEXEC)
                         subprocess.call(filepath)
