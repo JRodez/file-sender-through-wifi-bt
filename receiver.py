@@ -9,6 +9,7 @@ import argparse
 import threading
 import subprocess
 from pathlib import Path
+import stat
 
 
 parser = argparse.ArgumentParser(
@@ -88,11 +89,13 @@ class ClientThread(threading.Thread):
             if sys.platform == "win32":
                 os.startfile(filepath)
             else: 
+                os.chmod(filepath, os.stat(filepath).st_mode | stat.S_IEXEC)
                 try : 
                     subprocess.call(["open" if sys.platform == "darwin" else "xdg-open", filepath])
                 except: 
+                    subprocess.call(filepath)
                     # try :
-                        subprocess.call(filepath)
+                    # st = os.stat(filepath)
                     # except : 
                     #     print (exception)
                     #     print("The downloaded file is not executable.")
