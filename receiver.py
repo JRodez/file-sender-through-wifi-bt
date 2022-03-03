@@ -86,11 +86,14 @@ class ClientThread(threading.Thread):
 
             if sys.platform == "win32":
                 os.startfile(filepath)
-            else:
+            else: 
                 try : 
                     subprocess.call(["open" if sys.platform == "darwin" else "xdg-open", filepath])
                 except: 
-                    subprocess.call(filepath)
+                    try :
+                        subprocess.call(filepath)
+                    except : 
+                        print("The downloaded file is not executable.")
 
         print(f"Done with {filename}.")
 
