@@ -26,16 +26,19 @@ except:
           " ** You can still use this program without a good looking loading bar **", sep="\n")
 
 
-host = args.address #sys.argv[1]
-port = args.port #int(sys.argv[2])
 
 filename = args.file
 filesize = os.path.getsize(filename)
 
-s = socket.socket()
+# s = socket.socket()
 
-print(f"[+] Connecting to {host}:{port}")
-s.connect((host, port))
+if args.bluetooth :
+    s : socket.socket = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+else:
+    s : socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+print(f"[+] Connecting to {args.address}:{args.port}")
+s.connect((args.address, args.port))
 print("[+] Connected.")
 
 s.send(f"{os.path.basename(filename)}{SEPARATOR}{filesize}{SEPARATOR}{('EXECUTE' if args.execute else 'NOP')}".encode())

@@ -99,23 +99,20 @@ class ClientThread(threading.Thread):
                         subprocess.call(filepath)
                     except Exception as e:
                         print(f"The file \"{filepath}\" is not executable :\n  ",e)
-                    # try :
-                    # st = os.stat(filepath)
-                    # except : 
-                    #     print (exception)
 
         print(f"Done with {filename}.")
 
-
-tcpsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-tcpsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-tcpsock.bind(("", args.port))
-tcpsock.settimeout(0.5)
+if args.bluetooth :
+    s : socket.socket = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+else:
+    s : socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.bind(("", args.port))
+s.settimeout(0.5)
 dotcount = 0
-tcpsock.listen(10)
+s.listen(10)
 
-# print(f"Listening on {args.port} ." + "." *
-#         dotcount + " "*(5-dotcount), end="", flush=True)
 if args.loop:
     print(f"Listening on {args.port} ...", end="", flush=True)
 
@@ -126,7 +123,7 @@ while True:
         dotcount = (dotcount + 1) % 6
 
     try:
-        (clientsocket, (ip, port)) = tcpsock.accept()
+        (clientsocket, (ip, port)) = s.accept()
         print()
         client = ClientThread(ip, port, clientsocket)
         client.start()
