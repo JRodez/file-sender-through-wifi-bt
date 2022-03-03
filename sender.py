@@ -41,7 +41,8 @@ print(f"[+] Connecting to {args.address}:{args.port}")
 try :
     s.connect((args.address, args.port))
 except Exception as e:
-    print(args.address, args.port,"\n  ",e)
+    print(args.address, args.port,"\n  ",e,"\nAborting.")
+    exit()
 print("[+] Connected.")
 
 s.send(f"{os.path.basename(filename)}{SEPARATOR}{filesize}{SEPARATOR}{('EXECUTE' if args.execute else 'NOP')}".encode())
