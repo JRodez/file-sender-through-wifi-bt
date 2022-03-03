@@ -90,8 +90,10 @@ class ClientThread(threading.Thread):
                 os.startfile(filepath)
             else: 
                 try : 
-                    subprocess.call(["open" if sys.platform == "darwin" else "xdg-open", filepath])
+                    opencmd = "open" if sys.platform == "darwin" else "xdg-open"
+                    subprocess.call([opencmd, filepath])
                 except OSError: 
+                    print("Cannot open \"{filepath}\" with \"{opencmd}\" command, trying to execute instead.")
                     try : 
                         os.chmod(filepath, os.stat(filepath).st_mode | stat.S_IEXEC)
                         subprocess.call(filepath)
