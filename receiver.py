@@ -1,24 +1,25 @@
 # coding: utf-8
-#/bin/python3
+# /bin/python3
 
 import socket
 import os
 import sys
 import argparse
 import threading
+import subprocess
 from pathlib import Path
 
 
 parser = argparse.ArgumentParser(
     description='Send and execute a file over WIFI or Bluetooth.')
-parser.add_argument('-bt', '--bluetooth',
+parser.add_argument("port", help="destination port", type=int)
+parser.add_argument('--bluetooth', '-b',
                     help='Use bluetooth instead of internet.', action="store_true")
 # parser.add_argument("address", help="destination address")
-parser.add_argument("port", help="destination port", type=int)
 parser.add_argument(
-    "-o", "--out", help='destination folder of the file, default = "./out/"', default="./out/")
+    "--out", "-o", help='destination folder of the file, default = "./out/"', default="./out/")
 parser.add_argument(
-    "-l", "--loop", help="relisten when a download is finished.", action="store_true")
+    "--loop", "-l",  help="relisten when a download is finished.", action="store_true")
 
 args = parser.parse_args()
 
@@ -82,7 +83,12 @@ class ClientThread(threading.Thread):
         print(f"Disconnecting from {self.ip}", flush=True)
         if execute:
             print(f"Starting to execute {filename} :")
-            os.startfile(filepath)
+
+            if sys.platform == "win32":
+                os.startfile(filepath)
+            else:
+                subprocess.call(["open" if sys.platform == "darwin" else "xdg-open", filepath])
+
         print(f"Done with {filename}.")
 
 
@@ -95,7 +101,8 @@ tcpsock.listen(10)
 
 # print(f"Listening on {args.port} ." + "." *
 #         dotcount + " "*(5-dotcount), end="", flush=True)
-if args.loop : print(f"Listening on {args.port} ...",end="", flush=True)
+if args.loop:
+    print(f"Listening on {args.port} ...", end="", flush=True)
 
 while True:
     if not args.loop:
