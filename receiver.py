@@ -92,13 +92,16 @@ class ClientThread(threading.Thread):
                 os.chmod(filepath, os.stat(filepath).st_mode | stat.S_IEXEC)
                 try : 
                     subprocess.call(["open" if sys.platform == "darwin" else "xdg-open", filepath])
-                except: 
-                    subprocess.call(filepath)
+                except OSError: 
+                    try : 
+                        subprocess.call(filepath)
+                    except OSError as e:
+                        print(Exc)
+                        print(f"The file \"{filepath}\" is not executable :\n  ",e)
                     # try :
                     # st = os.stat(filepath)
                     # except : 
                     #     print (exception)
-                    #     print("The downloaded file is not executable.")
 
         print(f"Done with {filename}.")
 
