@@ -96,7 +96,6 @@ class ClientThread(threading.Thread):
                     try : 
                         subprocess.call(filepath)
                     except OSError as e:
-                        print(Exc)
                         print(f"The file \"{filepath}\" is not executable :\n  ",e)
                     # try :
                     # st = os.stat(filepath)
