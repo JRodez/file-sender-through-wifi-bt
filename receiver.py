@@ -12,7 +12,7 @@ from pathlib import Path
 import stat
 import re
 import uuid
-import bluetooth
+# import bluetooth
 
 
 parser = argparse.ArgumentParser(
