@@ -124,7 +124,7 @@ if __name__ == "__main__":
         s: socket.socket = socket.socket(
             socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        s.bind((myBtAdd, args.port))
+        s.bind(("", args.port))
 
     else:
         s: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
