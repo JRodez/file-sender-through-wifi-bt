@@ -132,7 +132,7 @@ if __name__ == "__main__":
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind(("", args.port))
 
-    s.settimeout(0.5)
+    # s.settimeout(0.5)
     dotcount = 0
     s.listen(10)
 
