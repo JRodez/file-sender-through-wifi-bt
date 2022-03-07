@@ -66,8 +66,8 @@ with open(filename, "rb") as f:
 
         s.sendall(bytes_read)
 
-        if args.bluetooth:
-            print(s.recv(1024))
+        # if args.bluetooth:
+        #     print(s.recv(1024))
 
         if TQDM:
             progress.update(len(bytes_read))
