@@ -74,9 +74,9 @@ with open(filename, "rb") as f:
             try : # empty buffer 
                 s.settimeout(0.01) 
                 s.recv(BUFFER_SIZE)
-                s.settimeout(10)
             except :
-                continue
+                pass
+            s.settimeout(10)
 
 progress.close()
 s.close()
