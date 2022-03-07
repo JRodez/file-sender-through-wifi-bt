@@ -121,8 +121,9 @@ def executeFile(filepath) :
 if __name__ == "__main__":
 
     if args.bluetooth:
-        s: socket.socket = socket.socket(
-            socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+        s: bluetooth.BluetoothSocket = bluetooth.BluetoothSocket()
+        # s: socket.socket = socket.socket(
+        #     socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind(("", args.port))
 
