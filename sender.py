@@ -5,7 +5,7 @@ import socket
 import os
 import sys
 import argparse
-import bluetooth
+
 
 TQDM = False
 SEPARATOR = "<SEPARATOR>"
@@ -37,6 +37,7 @@ filesize = os.path.getsize(filename)
 # s = socket.socket()
 
 if args.bluetooth:
+    import bluetooth
     s: bluetooth.BluetoothSocket = bluetooth.BluetoothSocket()
     #s : socket.socket = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
 else:
