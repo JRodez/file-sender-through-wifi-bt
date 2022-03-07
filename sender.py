@@ -6,6 +6,7 @@ import os
 import sys
 import argparse
 import bluetooth
+from pathlib import Path
 
 
 TQDM = False
@@ -32,7 +33,7 @@ except:
           " ** You can still use this program without a good looking loading bar **", sep="\n")
 
 
-filename = args.file
+filename = Path(args.file)
 filesize = os.path.getsize(filename)
 
 
