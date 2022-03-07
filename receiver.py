@@ -75,7 +75,12 @@ class ClientThread(threading.Thread):
 
         with open(filepath, 'wb') as f:
             while True:
-                bytes_read = self.clientsocket.recv(BUFFER_SIZE)
+                try : 
+                    bytes_read = self.clientsocket.recv(BUFFER_SIZE)
+                except :
+                    print("Connection ended")
+                    bytes_read = None
+
                 if not bytes_read or (currentsize == filesize):
                     if TQDM:
                         progress.close()
