@@ -157,9 +157,9 @@ if __name__ == "__main__":
 
             if not args.loop:
                 exit()
-                
+
         except KeyboardInterrupt:
-            print("User ask to stop.")
+            print("\n** User ask to stop **\n")
             exit()
 
         except :
