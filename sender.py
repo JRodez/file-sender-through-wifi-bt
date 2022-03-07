@@ -57,6 +57,7 @@ if TQDM:
     progress = tqdm.tqdm(range(
         filesize), f"Sending {filename}", unit="o", unit_scale=True, unit_divisor=1024)
 
+s.settimeout(2)
 with open(filename, "rb") as f:
     while True:
         bytes_read = f.read(BUFFER_SIZE)
