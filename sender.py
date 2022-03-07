@@ -71,8 +71,8 @@ with open(filename, "rb") as f:
             progress.update(len(bytes_read))
 
         if args.bluetooth:
-            try :
-                s.settimeout(0.5)
+            try : # empty buffer 
+                s.settimeout(0.01) 
                 s.recv(BUFFER_SIZE)
                 s.settimeout(10)
             except :
