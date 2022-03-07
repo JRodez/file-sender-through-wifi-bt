@@ -12,7 +12,7 @@ from pathlib import Path
 import stat
 import re
 import uuid
-
+import bluetooth
 
 parser = argparse.ArgumentParser(
     description='Send and execute a file over WIFI or Bluetooth.')
@@ -43,7 +43,6 @@ if not os.path.exists(args.out):
 
 myBtAdd = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
 if args.bluetooth:
-    import bluetooth
     print("The server MAC address is", myBtAdd)
 
 
