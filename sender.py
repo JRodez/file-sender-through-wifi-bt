@@ -35,11 +35,10 @@ except:
 filename = args.file
 filesize = os.path.getsize(filename)
 
-# s = socket.socket()
 
 if args.bluetooth:
     s: bluetooth.BluetoothSocket = bluetooth.BluetoothSocket()
-    #s : socket.socket = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+    s.settimeout(3)
 else:
     s: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -59,7 +58,6 @@ if TQDM:
     progress = tqdm.tqdm(range(
         filesize), f"Sending {filename}", unit="o", unit_scale=True, unit_divisor=1024)
 
-s.settimeout(1)
 with open(filename, "rb") as f:
     while True:
         bytes_read = f.read(BUFFER_SIZE)
