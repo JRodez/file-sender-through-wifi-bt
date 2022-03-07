@@ -1,20 +1,23 @@
 # coding: utf-8
-#/bin/python3
+# /bin/python3
 import socket
 import os
 import sys
 import argparse
-# import bluetooth
+import bluetooth
 
 TQDM = False
 SEPARATOR = "<SEPARATOR>"
-BUFFER_SIZE = 4096 
+BUFFER_SIZE = 4096
 
-parser = argparse.ArgumentParser(description='Send and execute a file over WIFI or Bluetooth.')
-parser.add_argument('-b','--bluetooth', help='Use bluetooth instead of internet.',action="store_true")
-parser.add_argument('-x','--execute', help='Execute file remotely after upload.',action="store_true")
+parser = argparse.ArgumentParser(
+    description='Send and execute a file over WIFI or Bluetooth.')
+parser.add_argument('-b', '--bluetooth',
+                    help='Use bluetooth instead of internet.', action="store_true")
+parser.add_argument(
+    '-x', '--execute', help='Execute file remotely after upload.', action="store_true")
 parser.add_argument("address", help="destination address")
-parser.add_argument("port", help="destination port",type=int)
+parser.add_argument("port", help="destination port", type=int)
 parser.add_argument("file", help="file to send")
 
 args = parser.parse_args()
@@ -27,28 +30,30 @@ except:
           " ** You can still use this program without a good looking loading bar **", sep="\n")
 
 
-
 filename = args.file
 filesize = os.path.getsize(filename)
 
 # s = socket.socket()
 
-if args.bluetooth :
-    s : socket.socket = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+if args.bluetooth:
+    s: bluetooth.BluetoothSocket = bluetooth.BluetoothSocket()
+    #s : socket.socket = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
 else:
-    s : socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 print(f"[+] Connecting to {args.address} @ {args.port}")
-try :
+try:
     s.connect((args.address, args.port))
 except Exception as e:
-    print(args.address, args.port,"\n  ",e,f" - {args.address} {args.port}\nAborting.")
+    print(args.address, "@", args.port, "\n  ", e,
+          f" - {args.address} {args.port}\nAborting.")
+    s.close()
     exit()
 print("[+] Connected.")
 
 s.send(f"{os.path.basename(filename)}{SEPARATOR}{filesize}{SEPARATOR}{('EXECUTE' if args.execute else 'NOP')}".encode())
 
-if TQDM :
+if TQDM:
     progress = tqdm.tqdm(range(
         filesize), f"Sending {filename}", unit="o", unit_scale=True, unit_divisor=1024)
 
@@ -57,10 +62,10 @@ with open(filename, "rb") as f:
         bytes_read = f.read(BUFFER_SIZE)
         if not bytes_read:
             break
- 
+
         s.sendall(bytes_read)
 
-        if TQDM :
+        if TQDM:
             progress.update(len(bytes_read))
 
 s.close()
