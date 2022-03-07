@@ -4,6 +4,7 @@ import socket
 import os
 import sys
 import argparse
+import bluetooth
 
 TQDM = False
 SEPARATOR = "<SEPARATOR>"
@@ -41,7 +42,7 @@ print(f"[+] Connecting to {args.address}:{args.port}")
 try :
     s.connect((args.address, args.port))
 except Exception as e:
-    print(args.address, args.port,"\n  ",e,"\nAborting.")
+    print(args.address, args.port,"\n  ",e," - {args.address} {args.port}\nAborting.")
     exit()
 print("[+] Connected.")
 
