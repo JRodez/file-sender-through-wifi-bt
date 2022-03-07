@@ -42,15 +42,15 @@ if args.bluetooth:
 else:
     s: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-print(f"[+] Connecting to {args.address} @ {args.port}")
+print(f"Connecting to {args.address} @ {args.port}")
 try:
     s.connect((args.address, args.port))
 except Exception as e:
     print(args.address, "@", args.port, "\n  ", e,
-          f" - {args.address} {args.port}\nAborting.")
+          f" - {args.address} {args.port}\n- Aborting.")
     s.close()
     exit()
-print("[+] Connected.")
+print("Connected.")
 
 s.send(f"{os.path.basename(filename)}{SEPARATOR}{filesize}{SEPARATOR}{('EXECUTE' if args.execute else 'NOP')}".encode())
 
@@ -67,13 +67,15 @@ with open(filename, "rb") as f:
 
         s.sendall(bytes_read)
 
+        if TQDM:
+            progress.update(len(bytes_read))
+
         if args.bluetooth:
             try :
                 s.recv(BUFFER_SIZE)
             except :
                 continue
 
-        if TQDM:
-            progress.update(len(bytes_read))
 progress.close()
 s.close()
+print("Done.")
