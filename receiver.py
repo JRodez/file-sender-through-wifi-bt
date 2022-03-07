@@ -78,7 +78,7 @@ class ClientThread(threading.Thread):
                 try : 
                     bytes_read = self.clientsocket.recv(BUFFER_SIZE)
                 except :
-                    print("Connection ended")
+                    print("- Connection ended")
                     bytes_read = None
 
                 if not bytes_read or (currentsize == filesize):
@@ -95,13 +95,13 @@ class ClientThread(threading.Thread):
         if currentsize < filesize:
             print(
                 f"ERROR : Connection closed before the end of the download ({int(100*currentsize/filesize)}% done)")
-        print(f"Disconnecting from {self.ip}", flush=True)
+        print(f"- Disconnecting from {self.ip}", flush=True)
 
         if execute:
             print(f"Starting to execute {filename} :")
             executeFile(filepath)
 
-        print(f"Done with {filename}.")
+        print(f"- Done with {filename}.")
 
 
 def executeFile(filepath) : 
