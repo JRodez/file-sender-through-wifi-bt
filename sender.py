@@ -5,7 +5,7 @@ import socket
 import os
 import sys
 import argparse
-import bluetooth
+# import bluetooth
 
 
 TQDM = False
@@ -38,7 +38,7 @@ filesize = os.path.getsize(filename)
 
 if args.bluetooth:
     s: bluetooth.BluetoothSocket = bluetooth.BluetoothSocket()
-    s.settimeout(3)
+    s.settimeout(10)
 else:
     s: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
