@@ -72,7 +72,9 @@ with open(filename, "rb") as f:
 
         if args.bluetooth:
             try :
+                s.settimeout(0.5)
                 s.recv(BUFFER_SIZE)
+                s.settimeout(10)
             except :
                 continue
 
