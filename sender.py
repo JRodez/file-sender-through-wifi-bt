@@ -67,9 +67,12 @@ with open(filename, "rb") as f:
         s.sendall(bytes_read)
 
         if args.bluetooth:
-            print( s.recv(BUFFER_SIZE) )
+            try :
+                s.recv(BUFFER_SIZE)
+            except :
+                continue
 
         if TQDM:
             progress.update(len(bytes_read))
-
+progress.close()
 s.close()
