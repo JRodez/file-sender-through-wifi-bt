@@ -76,7 +76,7 @@ class ClientThread(threading.Thread):
         with open(filepath, 'wb') as f:
             while True:
                 bytes_read = self.clientsocket.recv(BUFFER_SIZE)
-                if not bytes_read:
+                if not bytes_read or (currentsize == filesize):
                     if TQDM:
                         progress.close()
                     break
@@ -86,10 +86,10 @@ class ClientThread(threading.Thread):
                 if TQDM:
                     progress.update(len(bytes_read))
 
+        self.clientsocket.close()
         if currentsize < filesize:
             print(
                 f"ERROR : Connection closed before the end of the download ({int(100*currentsize/filesize)}% done)")
-        self.clientsocket.close()
         print(f"Disconnecting from {self.ip}", flush=True)
 
         if execute:
