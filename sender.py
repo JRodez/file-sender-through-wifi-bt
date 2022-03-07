@@ -57,7 +57,7 @@ if TQDM:
     progress = tqdm.tqdm(range(
         filesize), f"Sending {filename}", unit="o", unit_scale=True, unit_divisor=1024)
 
-s.settimeout(2)
+s.settimeout(5)
 with open(filename, "rb") as f:
     while True:
         bytes_read = f.read(BUFFER_SIZE)
@@ -66,8 +66,8 @@ with open(filename, "rb") as f:
 
         s.sendall(bytes_read)
 
-        # if args.bluetooth:
-        #     print(s.recv(1024))
+        if args.bluetooth:
+            print( s.recv(BUFFER_SIZE) )
 
         if TQDM:
             progress.update(len(bytes_read))
