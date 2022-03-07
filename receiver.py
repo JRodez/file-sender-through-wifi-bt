@@ -155,5 +155,5 @@ if __name__ == "__main__":
                 exit()
         except socket.timeout:
             continue
-        except bluetooth.BluetoothSocket.timeout:
+        except bluetooth.BluetoothError:
             continue
