@@ -54,7 +54,7 @@ class ClientThread(threading.Thread):
         threading.Thread.__init__(self)
         self.ip = ip
         self.port = port
-        self.clientsocket: socket.socket = clientsocket
+        self.clientsocket = clientsocket
 
     def run(self):
 
@@ -157,7 +157,10 @@ if __name__ == "__main__":
 
             if not args.loop:
                 exit()
-        except socket.timeout:
-            continue
-        except bluetooth.BluetoothError:
-            continue
+                
+        except KeyboardInterrupt:
+            print("User ask to stop.")
+            exit()
+
+        except :
+            pass
