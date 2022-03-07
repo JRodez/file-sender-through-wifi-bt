@@ -39,13 +39,13 @@ filesize = os.path.getsize(filename)
 
 if args.bluetooth:
     s: bluetooth.BluetoothSocket = bluetooth.BluetoothSocket()
-    s.settimeout(10)
 else:
     s: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 print(f"Connecting to {args.address} @ {args.port}")
 try:
     s.connect((args.address, args.port))
+    s.settimeout(10)
 except Exception as e:
     print(args.address, "@", args.port, "\n  ", e,
           f" - {args.address} {args.port}\n- Aborting.")
