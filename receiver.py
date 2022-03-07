@@ -58,7 +58,7 @@ class ClientThread(threading.Thread):
 
     def run(self):
 
-        print("Incoming file from %s:%s" % (self.ip, self.port, ))
+        print("Incoming file from %s @ %s" % (self.ip, self.port, ))
 
         received = self.clientsocket.recv(BUFFER_SIZE).decode()
         receiveTuple = received.split(SEPARATOR)
