@@ -38,11 +38,11 @@ if args.bluetooth :
 else:
     s : socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-print(f"[+] Connecting to {args.address}:{args.port}")
+print(f"[+] Connecting to {args.address} @ {args.port}")
 try :
     s.connect((args.address, args.port))
 except Exception as e:
-    print(args.address, args.port,"\n  ",e," - {args.address} {args.port}\nAborting.")
+    print(args.address, args.port,"\n  ",e,f" - {args.address} {args.port}\nAborting.")
     exit()
 print("[+] Connected.")
 
