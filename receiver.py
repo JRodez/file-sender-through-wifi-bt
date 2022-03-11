@@ -41,9 +41,9 @@ OUTDIR = Path(args.out)
 if not os.path.exists(args.out):
     os.makedirs(args.out)
 
-myBtAdd = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
-if args.bluetooth:
-    print("The server MAC address is", myBtAdd)
+# myBtAdd = ':'.join(re.findall('..', '%012x' % uuid.getnode()))
+# if args.bluetooth:
+#     print("The server MAC address is", myBtAdd)
 
 
 
