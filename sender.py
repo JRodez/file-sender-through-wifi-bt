@@ -15,12 +15,12 @@ BUFFER_SIZE = 4096
 
 parser = argparse.ArgumentParser(
     description='Send and execute a file over WIFI or Bluetooth.')
-parser.add_argument('-b', '--bluetooth',
+parser.add_argument( '--bluetooth','-b',
                     help='Use bluetooth instead of internet.', action="store_true")
 parser.add_argument(
-    '-x', '--execute', help='Execute file remotely after upload.', action="store_true")
+     '--execute','-x', help='Execute file remotely after upload.', action="store_true")
 parser.add_argument("address", help="destination address")
-parser.add_argument("port", help="destination port", type=int)
+parser.add_argument("port", help="port", type=int)
 parser.add_argument("file", help="file to send")
 
 args = parser.parse_args()
