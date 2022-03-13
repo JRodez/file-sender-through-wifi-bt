@@ -7,6 +7,7 @@ fi
 
 
 
+
 rfkill unblock wifi; rfkill unblock all
 wpa_cli terminate
 sleep 1
