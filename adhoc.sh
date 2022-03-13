@@ -1,9 +1,11 @@
 #!/bin/bash
+
 if [$# -ne 2]; 
 	echo "USAGE : $0 <network name> <node number>"
-	exit 1
+	exit
 fi
-sudo rfkill unblock wifi; sudo rfkill unblock all
+
+rfkill unblock wifi; rfkill unblock all
 wpa_cli terminate
 sleep 1
 scan="$(sudo iwlist wlan0 scan | grep Frequency | sort | uniq -c | sort -n )"
@@ -17,4 +19,4 @@ iwconfig wlan0 essid $1
 echo "My ip address is 192.168.2.$2 over $1 network using the $CHANNEL channel."
 ifconfig wlan0 192.168.2.$2
 ifconfig wlan0 up
-exit 0
+exit
