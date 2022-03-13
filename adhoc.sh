@@ -5,9 +5,6 @@ if [$# -ne 2]; then
 	exit
 fi
 
-
-
-
 rfkill unblock wifi; rfkill unblock all
 wpa_cli terminate
 sleep 1
