@@ -3,6 +3,7 @@ echo "USAGE : $0 <network name> <node number>"
 sudo rfkill unblock wifi; sudo rfkill unblock all
 wpa_cli terminate
 sleep 1
+iwlist wlan0 scan | grep Frequency | sort | uniq -c | sort -n
 ifconfig wlan0 down
 iwconfig wlan0 mode Ad-Hoc
 iwconfig wlan0 essid $1
