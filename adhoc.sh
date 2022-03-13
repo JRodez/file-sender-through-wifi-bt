@@ -1,6 +1,7 @@
 #!/bin/bash
 
-if [$# -ne 2]; then
+if [$# -ne 2]; 
+then
 	echo "USAGE : $0 <network name> <node number>"
 	exit
 fi
