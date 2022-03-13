@@ -1,5 +1,4 @@
 #!/bin/bash
-@Echo off
 
 if [ $# -ne 2 ]
 then
