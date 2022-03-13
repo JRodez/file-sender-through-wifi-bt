@@ -7,7 +7,7 @@ then
 fi
 
 ifconfig wlan0 up
-sleep 2
+sleep 1
 scan="$(sudo iwlist wlan0 scan | grep Frequency | sort | uniq -c | sort -n )"
 echo "$scan"
 CHANNEL=$(echo $scan | cut -d '(' -f 2 | cut -d ' ' -f 2 | cut -d ')' -f 1 | head -n 1)
